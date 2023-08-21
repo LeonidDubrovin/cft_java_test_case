@@ -167,26 +167,26 @@ public class Main {
         );
 
         for (File file : tmpFiles) {
-            TmpFileBufferedReader tfbr = new TmpFileBufferedReader(file);
-            pq.add(tfbr);
+            TmpFileBufferedReader fbr = new TmpFileBufferedReader(file);
+            pq.add(fbr);
         }
 
         try (BufferedWriter fbw = new BufferedWriter(new FileWriter(outputFile))) {
             while (pq.size() > 0) {
-                TmpFileBufferedReader fb = pq.poll();
-                String line = fb.poll();
+                TmpFileBufferedReader fbr = pq.poll();
+                String line = fbr.poll();
                 fbw.write(line);
                 fbw.newLine();
-                if (fb.isEmpty()) {
-                    fb.bufferedReader.close();
-                    fb.file.delete();
+                if (fbr.isEmpty()) {
+                    fbr.bufferedReader.close();
+                    fbr.file.delete();
                 } else {
-                    pq.add(fb);
+                    pq.add(fbr);
                 }
             }
         } finally {
-            for (TmpFileBufferedReader tfbr : pq)
-                tfbr.close();
+            for (TmpFileBufferedReader fbr : pq)
+                fbr.close();
         }
     }
 
